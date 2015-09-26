@@ -3,8 +3,8 @@ tmr.alarm( 1 , 30000 , 0 , function()end)
 
 
 -- Constants
-SSID    = "WeAll_2.4G"
-APPWD   = "W3LC0M3T0W3ALL"
+SSID    = "SSID"
+APPWD   = "WLAN KEY"
 CMDFILE = "WlanSteckdose2.lc"   -- File that is executed after connection
 
 -- Some control variables
