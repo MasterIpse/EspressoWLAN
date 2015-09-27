@@ -5,7 +5,7 @@ tmr.alarm( 1 , 30000 , 0 , function()end)
 -- Constants
 SSID    = "SSID"
 APPWD   = "WLAN KEY"
-CMDFILE = "WlanSteckdose2.lc"   -- File that is executed after connection
+CMDFILE = "Switch.lc"   -- File that is executed after connection
 
 -- Some control variables
 wifiTrys     = 0      -- Counter of trys to connect to wifi
