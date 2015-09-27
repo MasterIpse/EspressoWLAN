@@ -28,12 +28,7 @@ function buttonHandler()
 	-- If Button is pressed and hasen't been pressed before, call on(), else call off
     if (button_state == 0 and button_state_new == 0) then
       	print("Button on")
-      	-- Send Pushbullet Notification. Only if switched on via HTTP
-        onn=net.createConnection(net.TCP, 0) 
-    	conn:on("receive", function(conn, payload) print(payload) end )
-    	conn:connect(80,"192.168.2.4")
-    	conn:send("GET /iot/pushit.php?title=Espresso&msg=Maschine%20ist%20aufgewaermt HTTP/1.1\r\nHost: 192.168.2.4\r\nConnection: close\r\nAccept: */*\r\n\r\n")
-        on()
+      	on()
     elseif (button_state == 1 and button_state_new == 0) then
         print("Button off")
         off()
@@ -85,7 +80,12 @@ srv:listen(80,function(conn)
             buf = buf.."<p>Espresso-Maschine <a href=\"?pin=ON1\"><button>ON</button></a>&nbsp;<a href=\"?pin=OFF1\"><button>OFF</button></a></p>";
                 local _on,_off = "",""
         if(_GET.pin == "ON1")then
-            on()
+	        -- Send Pushbullet Notification. Only if switched on via HTTP
+	        conn=net.createConnection(net.TCP, 0) 
+	    	conn:on("receive", function(conn, payload) print(payload) end )
+	    	conn:connect(80,"192.168.2.4")
+	    	conn:send("GET /iot/pushit.php?title=Espresso&msg=Maschine%20ist%20an HTTP/1.1\r\nHost: 192.168.2.4\r\nConnection: close\r\nAccept: */*\r\n\r\n")
+	       	on()
         elseif(_GET.pin == "OFF1")then
             off()
         end
@@ -97,12 +97,7 @@ end)
 
 -- Create the color orange with PWM
 function orange()
-	-- Send Pushbullet Notification
-	onn=net.createConnection(net.TCP, 0) 
-    conn:on("receive", function(conn, payload) print(payload) end )
-    conn:connect(80,"192.168.2.4")
-    conn:send("GET /iot/pushit.php?title=Espresso&msg=Maschine%20ist%20aufgewaermt HTTP/1.1\r\nHost: 192.168.2.4\r\nConnection: close\r\nAccept: */*\r\n\r\n")
-    	print("Aufwärmen")
+	print("Aufwärmen")
 	status = "Aufwärmen"
     pwm.setup(6, 100, 1000)
     pwm.start(6)
@@ -114,8 +109,13 @@ end
 
 -- Create the color red with PWM
 function green()
+	-- Send Pushbullet Notification
+	conn=net.createConnection(net.TCP, 0) 
+    conn:on("receive", function(conn, payload) print(payload) end )
+    conn:connect(80,"192.168.2.4")
+    conn:send("GET /iot/pushit.php?title=Espresso&msg=Maschine%20ist%20aufgewaermt HTTP/1.1\r\nHost: 192.168.2.4\r\nConnection: close\r\nAccept: */*\r\n\r\n")
     print("Betrieb")
-	status = "Betrieb"
+    status = "Betrieb"
     pwm.stop(6)
     pwm.stop(7)
     pwm.setup(5, 100, 500)
