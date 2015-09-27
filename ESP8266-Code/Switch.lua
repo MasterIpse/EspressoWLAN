@@ -27,7 +27,12 @@ function buttonHandler()
     button_state_new = gpio.read(PIN_BUTTON)
 	-- If Button is pressed and hasen't been pressed before, call on(), else call off
     if (button_state == 0 and button_state_new == 0) then
-        print("Button on")
+      	print("Button on")
+      	-- Send Pushbullet Notification. Only if switched on via HTTP
+        onn=net.createConnection(net.TCP, 0) 
+    	conn:on("receive", function(conn, payload) print(payload) end )
+    	conn:connect(80,"192.168.2.4")
+    	conn:send("GET /iot/pushit.php?title=Espresso&msg=Maschine%20ist%20aufgewaermt HTTP/1.1\r\nHost: 192.168.2.4\r\nConnection: close\r\nAccept: */*\r\n\r\n")
         on()
     elseif (button_state == 1 and button_state_new == 0) then
         print("Button off")
@@ -92,7 +97,12 @@ end)
 
 -- Create the color orange with PWM
 function orange()
-	print("Aufwärmen")
+	-- Send Pushbullet Notification
+	onn=net.createConnection(net.TCP, 0) 
+    conn:on("receive", function(conn, payload) print(payload) end )
+    conn:connect(80,"192.168.2.4")
+    conn:send("GET /iot/pushit.php?title=Espresso&msg=Maschine%20ist%20aufgewaermt HTTP/1.1\r\nHost: 192.168.2.4\r\nConnection: close\r\nAccept: */*\r\n\r\n")
+    	print("Aufwärmen")
 	status = "Aufwärmen"
     pwm.setup(6, 100, 1000)
     pwm.start(6)
